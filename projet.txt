@@ -15,18 +15,18 @@ public class RSA {
 		p = new BigInteger(String.valueOf(97));
 		q = new BigInteger(String.valueOf(109));
 		n = q.multiply(p);
+		v =(q.add(new BigInteger("-1"))).multiply((p.add(new BigInteger("-1"))));
+		System.out.println(v);
 		System.out.println(n);
-		c = clefpub();
+		u = clefpub();
 		clefprivee();
-		BigInteger r = new BigInteger("0");
-		r = crypter(mesASC);
-		r.toString();
-		System.out.println("Code a envoyer" + r);
+		BigInteger Crypter[] = crypter(mesASC);
 		
 		
 	}
 	
 	BigInteger p = new BigInteger("0");
+	BigInteger u = new BigInteger("0");
 	BigInteger q = new BigInteger("0");
 	BigInteger n = new BigInteger("0");
 	BigInteger c = new BigInteger("0");
@@ -54,8 +54,7 @@ public class RSA {
 		Boolean b = true; 
 		k =new BigInteger(String.valueOf(2));
 		c = new BigInteger(String.valueOf(3));
-		v =(q.add(new BigInteger("-1"))).multiply((p.add(new BigInteger("-1"))));
-		System.out.println(v);
+		
 		
 		while ( b && v.compareTo(c) >= 1) { // recherche du premier nombre entier qui soit premier avec (p-1)(q-1)
 			
@@ -77,7 +76,7 @@ public class RSA {
 				c = c.add(new BigInteger("2"));
 			}
 			else { 
-				b = false;// le PGCD est égale a 1 donc les deux nombres sont premier entre eux
+				b = false;// le PGCD est Ã©gale a 1 donc les deux nombres sont premier entre eux
 				System.out.println("Res :" + c);
 			}	
 		}
@@ -86,39 +85,39 @@ public class RSA {
 	}
 
 	
-	public BigInteger crypter(int mesASC[]) {
-		BigInteger r = new BigInteger("0");
-		r = new BigInteger(String.valueOf(1));
-		BigInteger a = new BigInteger("0");		
-		BigInteger o = new BigInteger("0");
-		o = new BigInteger(String.valueOf(0));
-		
-		for ( int i=0;c.compareTo(o) == 0;i++) {// modulo du message^c par n
+	public BigInteger[] crypter(int mesASC[]) {
+	
+		BigInteger codee[] = new BigInteger[longueur];
+		for (int i=0;i<longueur;i++) {
+			BigInteger r = new BigInteger("0");
+			r = new BigInteger(String.valueOf(1));
+			BigInteger a = new BigInteger("0");		
+			BigInteger o = new BigInteger("0");
+			o = new BigInteger(String.valueOf(0));
+			for (  int j=0;c.compareTo(o) == 1;j++) {// modulo du message^c par n
 			
-			a = new BigInteger(String.valueOf(mesASC[i]));
-			r = r.multiply(a);
-			r = r.mod(n);
-			o = new BigInteger(String.valueOf(i+1));
-			System.out.println(r);
-			
+				a = new BigInteger(String.valueOf(mesASC[i]));
+				r = r.multiply(a);
+				r = r.mod(n);
+				codee[i] = r;
+				o = new BigInteger(String.valueOf(j+1));
+		}
+			System.out.println("Code a envoyer=" + r);
 			}
 		
-		System.out.println("Code a envoyer" +r);
-		return r;
+		return codee;
 		}
 
 	public void clefprivee() {
 		
 		BigInteger j = new BigInteger("0");
 		j = new BigInteger(String.valueOf(1));
-		BigInteger comparaison1 = new BigInteger("0");
-		comparaison1 = new BigInteger(String.valueOf(0));
-		
-		while ((j.mod(c)).compareTo(comparaison1) != 0){
+		System.out.print("Je suis dans clefprivee");
+		while ((j.remainder(u)).compareTo(new BigInteger("1")) == 0) {//probleme dans la boucle
 			j = j.add(v);
-					}
+				}
 		
-		cleprive = j.divide(c);
-		System.out.println("cléprivée"+cleprive);
+		cleprive = j.divide(u);
+		System.out.println("clÃ© privÃ©e"+ cleprive);
 		}
 	}
