@@ -3,7 +3,7 @@ public class RSA {
 	public static void main(String[] str){
 		new RSA();
 	}
-	
+	// Il est possible de changer manuellement la clef publique. Attention plus les nombres choisi sont grand plus le temps de decryptage est long mais la sécuriter sera plus élevée
 	public RSA() {
 		String message = "BONJOUR";
 		char mes[] = convertirASCII(message);
@@ -15,8 +15,8 @@ public class RSA {
 			 System.out.println(mesASC[i]);
 		}
 		
-		p = new BigInteger(String.valueOf(97));
-		q = new BigInteger(String.valueOf(109));
+		p = new BigInteger(String.valueOf(1009));// Peut être changer avec un autre nombre premier
+		q = new BigInteger(String.valueOf(1013));// Peut être changer avec un autre nombre premier
 		n = q.multiply(p);
 		v =(q.add(new BigInteger("-1"))).multiply((p.add(new BigInteger("-1"))));
 		System.out.println(v);
@@ -25,13 +25,11 @@ public class RSA {
 		u = clefpub();
 		
 		y = clefprivee();
-		String l = y.toString();
-		int d = Integer.parseInt(l);
 		
 		BigInteger Crypter[] = new BigInteger[longueur];
 		Crypter = crypter(mesASC);
 		
-		decrypter(Crypter,d);
+		decrypter(Crypter,y);
 		
 	}
 	
@@ -83,7 +81,6 @@ public class RSA {
 			
 			else { 
 				
-				System.out.println("boucle else");
 				b = false;// le PGCD est égale a 1 donc les deux nombres sont premier entre eux
 				System.out.println("Res :" + c);
 				
@@ -109,12 +106,12 @@ public class RSA {
 			o = new BigInteger(String.valueOf(0));
 			a = new BigInteger(String.valueOf(mesASC[i]));
 			
-			for ( int j=0;c.compareTo(o) == 1;j++) {// modulo du message^c par n	
+			while(c.compareTo(o) == 1){// modulo du message^c par n	
 				
 				r = r.multiply(a);
 				r = r.mod(n);
 				codee[i] = r;
-				o = new BigInteger(String.valueOf(j+1));
+				o = o.add(new BigInteger("1"));
 				
 		}
 			
@@ -147,20 +144,26 @@ public class RSA {
 		}
 	
 	
-	public void decrypter(BigInteger Crypter[], int d) {
+	public void decrypter(BigInteger Crypter[],BigInteger y) {
 		
 		System.out.println(n);
 		BigInteger decrypter[] = new BigInteger[longueur];
 		
 		for (int i=0;i<longueur;i++) {
-			
+			BigInteger r = new BigInteger("0");
+			r = new BigInteger(String.valueOf(1));
 			BigInteger o = new BigInteger("0");
 			o = new BigInteger(String.valueOf(0));
 			BigInteger a = new BigInteger("0");		
 			a = new BigInteger(String.valueOf(Crypter[i]));
-			
-			while((((a.pow(d)).subtract(o)).mod(n)).compareTo(new BigInteger("0")) != 0) {
-				
+			BigInteger apuissanced = new BigInteger("0");		
+			apuissanced = new BigInteger(String.valueOf(Crypter[i]));
+			while(y.compareTo(r) != 0){
+				apuissanced = apuissanced.multiply(a);
+				r = r.add(new BigInteger("1"));
+			}
+		
+			while(((apuissanced.subtract(o)).mod(n)).compareTo(new BigInteger("0")) != 0) {
 				o = o.add(new BigInteger("1"));
 				
 			}
