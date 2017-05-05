@@ -1,35 +1,47 @@
-import java.math.BigInteger;
+import java.math.*;
+import java.util.*;
 public class RSA {
 	public static void main(String[] str){
 		new RSA();
 	}
 	// Il est possible de changer manuellement la clef publique. Attention plus les nombres choisi sont grand plus le temps de decryptage est long mais la sécuriter sera plus élevée
 	public RSA() {
-		String message = "BONJOUR";
+		Scanner sc= new Scanner(System.in);
+		System.out.println("saisir le message");
+		String message = sc.nextLine();
 		char mes[] = convertirASCII(message);
 		
 		int mesASC[] = new int[longueur];
 		for(int i=0; i<message.length();i++){
 			
 			 mesASC[i] = (int)mes[i];
-			 System.out.println(mesASC[i]);
+			 /*System.out.println(mesASC[i]);*/
 		}
 		
-		p = new BigInteger(String.valueOf(1009));// Peut être changer avec un autre nombre premier
-		q = new BigInteger(String.valueOf(1013));// Peut être changer avec un autre nombre premier
+		p = new BigInteger(String.valueOf(163));// Peut être changer avec un autre nombre premier
+		q = new BigInteger(String.valueOf(181));// Peut être changer avec un autre nombre premier
 		n = q.multiply(p);
 		v =(q.add(new BigInteger("-1"))).multiply((p.add(new BigInteger("-1"))));
-		System.out.println(v);
-		System.out.println(n);
-		
+		/*System.out.println(v);*/
+		System.out.println("nombre n clef publique = "+n);
+	
 		u = clefpub();
+		System.out.println("nombre c clef publique = "+u);
 		
 		y = clefprivee();
 		
 		BigInteger Crypter[] = new BigInteger[longueur];
 		Crypter = crypter(mesASC);
 		
-		decrypter(Crypter,y);
+		BigInteger messagedecrypter[]= decrypter(Crypter,y);
+		int messagereçuenombre[] = new int[longueur];
+		char messagereçue[] = new char[longueur];
+		System.out.print("message :");
+		for(int i=0; i<longueur;i++){
+			messagereçuenombre[i] = messagedecrypter[i].intValue();
+			 messagereçue[i] = (char)messagereçuenombre[i];
+			 System.out.print(messagereçue[i]);
+		}
 		
 	}
 	
@@ -82,7 +94,7 @@ public class RSA {
 			else { 
 				
 				b = false;// le PGCD est égale a 1 donc les deux nombres sont premier entre eux
-				System.out.println("Res :" + c);
+				/*System.out.println("Res :" + c);*/
 				
 			}	
 			
@@ -133,7 +145,7 @@ public class RSA {
 		while ((j.remainder(u)).compareTo(new BigInteger("0")) != 0) {
 			
 			j = j.add(v);
-			System.out.println(j);
+			/*System.out.println(j);*/
 			
 				}	
 		
@@ -144,9 +156,8 @@ public class RSA {
 		}
 	
 	
-	public void decrypter(BigInteger Crypter[],BigInteger y) {
+	public BigInteger[] decrypter(BigInteger Crypter[],BigInteger y) {
 		
-		System.out.println(n);
 		BigInteger decrypter[] = new BigInteger[longueur];
 		
 		for (int i=0;i<longueur;i++) {
@@ -169,8 +180,9 @@ public class RSA {
 			}
 			
 			decrypter[i] = o;
-			System.out.println("message:" + o);
+			/*System.out.println("message:" + o);*/
 		
 		}
+		return decrypter;
 	}
 }
