@@ -28,8 +28,12 @@ public class RSA {
 		u = clefpub();
 		System.out.println("nombre c clef publique = "+u);
 		
-		y = clefprivee();
-		
+		clefprivee();
+		Scanner sca= new Scanner(System.in);
+		System.out.println("saisir clef privee");
+		String h = sca.nextLine();
+		BigInteger y = new BigInteger("0");
+		y = new BigInteger(String.valueOf(h));
 		BigInteger Crypter[] = new BigInteger[longueur];
 		Crypter = crypter(mesASC);
 		
@@ -137,7 +141,7 @@ public class RSA {
 	
 	
 
-	public BigInteger clefprivee() {
+	public void clefprivee() {
 		
 		BigInteger j = new BigInteger("0");
 		j = new BigInteger(String.valueOf(1));
@@ -151,7 +155,6 @@ public class RSA {
 		
 		cleprive = j.divide(u);
 		System.out.println("clé privée"+":"+ cleprive);
-		return cleprive;
 		
 		}
 	
